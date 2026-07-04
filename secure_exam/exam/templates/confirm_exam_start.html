@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Start: {{ exam.title }}</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        .confirmation-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .exam-details {
+            margin-bottom: 1.5rem;
+            text-align: left;
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: var(--radius);
+        }
+
+        .exam-details p {
+            margin: 0.5rem 0;
+        }
+
+        .warning {
+            color: #d97706;
+            background: #fef3c7;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        button, .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+        }
+
+        button[type="submit"] {
+            background: var(--primary);
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            background: var(--danger);
+            color: white;
+        }
+
+        .button:hover {
+            background: var(--danger-hover);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 480px) {
+            .button-group {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            button, .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-card">
+        <h2>You're about to start: {{ exam.title }}</h2>
+        
+        <div class="exam-details">
+            <p><strong>Duration:</strong> {{ exam.duration_minutes }} minutes</p>
+            <p><strong>Questions:</strong> {{ exam.questions.count }} total</p>
+        </div>
+        
+        <div class="warning">
+            ⚠️ Important: Once started, the timer cannot be paused. Make sure you're ready!
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="button-group">
+                <button type="submit">Start Exam Now</button>
+                <a href="{% url 'student_course_view' exam.course %}" class="button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Exam - {{ exam.title }} | Secure Exam Portal</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --danger-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-gray: #ecf0f1;
+            --border-color: #ddd;
+            --success-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 2rem;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .exam-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            margin: 0;
+            color: var(--dark-color);
+            font-size: 1.8rem;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .timer-critical {
+            color: var(--danger-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .security-panel {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .webcam-feed {
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            width: 240px;
+            height: 180px;
+        }
+
+        .security-status {
+            flex: 1;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .status-active {
+            background-color: var(--success-color);
+        }
+
+        .status-warning {
+            background-color: var(--danger-color);
+            animation: pulse 1s infinite;
+        }
+
+        .question-block {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .option-label {
+            display: block;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .option-label:hover {
+            background-color: var(--light-gray);
+        }
+
+        .option-radio {
+            margin-right: 0.8rem;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .modal-title {
+            color: var(--danger-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .exam-container {
+                padding: 1.5rem;
+            }
+            
+            .security-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .webcam-feed {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <div class="exam-header">
+            <h2>{{ exam.title }}</h2>
+            <div class="timer-container" id="timer">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="countdown"></span>
+            </div>
+        </div>
+
+        <div class="security-panel">
+            <video id="webcam" class="webcam-feed" autoplay muted></video>
+            <canvas id="snapshot" width="640" height="480" style="display:none;"></canvas>
+            
+            <div class="security-status">
+                <div class="status-item">
+                    <div class="status-icon status-active" id="webcam-status"></div>
+                    <span>Webcam Monitoring Active</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon status-active" id="focus-status"></div>
+                    <span>Browser Focus Detected</span>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon status-active" id="activity-status"></div>
+                    <span>Student Activity Normal</span>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" id="exam-form">
+            {% csrf_token %}
+            {% for question in questions %}
+                <div class="question-block">
+                    <div class="question-text">{{ forloop.counter }}. {{ question.question_text }}</div>
+                    
+                    <label class="option-label">
+                        <input type="radio" class="option-radio" name="question_{{ question.id }}" value="A" required>
+                        {{ question.option_a }}
+                    </label>
+                    
+                    <label class="option-label">
+                        <input type="radio" class="option-radio" name="question_{{ question.id }}" value="B">
+                        {{ question.option_b }}
+                    </label>
+                    
+                    <label class="option-label">
+                        <input type="radio" class="option-radio" name="question_{{ question.id }}" value="C">
+                        {{ question.option_c }}
+                    </label>
+                    
+                    <label class="option-label">
+                        <input type="radio" class="option-radio" name="question_{{ question.id }}" value="D">
+                        {{ question.option_d }}
+                    </label>
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="submit-btn">Submit Exam</button>
+        </form>
+    </div>
+
+    <div class="warning-modal" id="warning-modal">
+        <div class="modal-content">
+            <div class="modal-title">Warning: Suspicious Activity Detected</div>
+            <p id="warning-message"></p>
+            <p>Repeated violations may result in exam termination.</p>
+            <button onclick="document.getElementById('warning-modal').style.display='none'" style="padding: 0.5rem 1.5rem; margin-top: 1rem; cursor: pointer;">Acknowledge</button>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Security Monitoring
+        const security = {
+            violations: 0,
+            maxViolations: 3,
+            webcamActive: true,
+            browserFocused: true,
+            studentActive: true,
+            
+            showWarning: function(message) {
+                document.getElementById('warning-message').textContent = message;
+                document.getElementById('warning-modal').style.display = 'flex';
+                this.violations++;
+                
+                if(this.violations >= this.maxViolations) {
+                    this.terminateExam("Maximum violations reached. Your exam is being submitted.");
+                }
+            },
+            
+            terminateExam: function(reason) {
+                alert(reason);
+                document.getElementById('exam-form').submit();
+            },
+            
+            updateStatusIndicators: function() {
+                document.getElementById('webcam-status').className = 
+                    `status-icon ${this.webcamActive ? 'status-active' : 'status-warning'}`;
+                document.getElementById('focus-status').className = 
+                    `status-icon ${this.browserFocused ? 'status-active' : 'status-warning'}`;
+                document.getElementById('activity-status').className = 
+                    `status-icon ${this.studentActive ? 'status-active' : 'status-warning'}`;
+            }
+        };
+
+        // Countdown Timer
+        const duration = {{ exam.duration_minutes }} * 60;
+        let timer = duration;
+        const countdownEl = document.getElementById('countdown');
+        const timerContainer = document.getElementById('timer');
+
+        const updateTimer = () => {
+            const minutes = parseInt(timer / 60, 10);
+            const seconds = parseInt(timer % 60, 10);
+            countdownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timer <= 300) { // Last 5 minutes
+                timerContainer.classList.add('timer-critical');
+            }
+
+            if (--timer < 0) {
+                clearInterval(countdownInterval);
+                security.terminateExam("Time's up! Your exam is being submitted.");
+            }
+        };
+
+        updateTimer();
+        const countdownInterval = setInterval(updateTimer, 1000);
+
+        // Tab/Browser Visibility Detection
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                security.browserFocused = false;
+                security.showWarning("You switched away from the exam tab/window.");
+                logSuspicious("Tab/window switch detected");
+            } else {
+                security.browserFocused = true;
+            }
+            security.updateStatusIndicators();
+        });
+
+        // Activity Monitoring
+        let idleTime = 0;
+        const activityCheck = setInterval(() => {
+            idleTime++;
+            if (idleTime > 1) { // 1 minute idle
+                security.studentActive = false;
+                security.showWarning("No activity detected for over a minute.");
+                logSuspicious("Student inactive for over a minute");
+            }
+            security.updateStatusIndicators();
+        }, 60000);
+
+        const resetActivityTimer = () => {
+            idleTime = 0;
+            security.studentActive = true;
+            security.updateStatusIndicators();
+        };
+
+        document.addEventListener('mousemove', resetActivityTimer);
+        document.addEventListener('keydown', resetActivityTimer);
+        document.addEventListener('click', resetActivityTimer);
+
+        // Webcam Monitoring
+        navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } })
+            .then(stream => {
+                document.getElementById('webcam').srcObject = stream;
+                setInterval(captureFrame, 5000); // Capture every 5 seconds
+            })
+            .catch(err => {
+                security.webcamActive = false;
+                security.showWarning("Webcam access denied or unavailable. Exam may be terminated.");
+                logSuspicious("Webcam access failed");
+                security.updateStatusIndicators();
+            });
+
+        function captureFrame() {
+            const video = document.getElementById('webcam');
+            const canvas = document.getElementById('snapshot');
+            const context = canvas.getContext('2d');
+            
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg');
+
+            fetch("{% url 'face_check' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ 
+                    image: imageData, 
+                    exam_id: {{ exam.id }},
+                    timestamp: new Date().toISOString()
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "no_face" || data.status === "multiple_faces") {
+                    security.webcamActive = false;
+                    const msg = data.status === "no_face" ? "Face not detected in webcam feed." : "Multiple faces detected.";
+                    security.showWarning(msg);
+                    logSuspicious(msg);
+                } else {
+                    security.webcamActive = true;
+                }
+                security.updateStatusIndicators();
+            })
+
+        }
+
+        function logSuspicious(reason) {
+            fetch("{% url 'log_suspicious' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ 
+                    reason: reason, 
+                    exam_id: {{ exam.id }},
+                    timestamp: new Date().toISOString(),
+                    page_url: window.location.href
+                })
+            });
+        }
+
+        // Prevent right-click and other shortcuts
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                security.showWarning("Keyboard shortcuts are disabled during the exam.");
+            }
+        });
+
+        // Auto-submit warning
+        window.addEventListener('beforeunload', (e) => {
+            if (timer > 0) {
+                e.preventDefault();
+                e.returnValue = 'Are you sure you want to leave? Your exam may be submitted automatically.';
+                return e.returnValue;
+            }
+        });
+    </script>
+</body>
+</html>

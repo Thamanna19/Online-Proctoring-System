@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ course }} Exams</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eaecef;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        h3 {
+            color: #3498db;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: white;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        li:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        .upcoming-exam {
+            border-left: 4px solid #3498db;
+        }
+        .completed-exam {
+            border-left: 4px solid #2ecc71;
+        }
+        .no-exams {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .score {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        .exam-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .exam-date {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ course }} Exams</h2>
+
+    <h3>Upcoming Exams</h3>
+    <ul>
+    {% for exam in upcoming_exams %}
+        <li class="upcoming-exam">
+            <span class="exam-title">{{ exam.title }}</span> - 
+            <span class="exam-date">{{ exam.scheduled_date }}</span>
+        </li>
+    {% empty %}
+        <li class="no-exams">No upcoming exams</li>
+    {% endfor %}
+    </ul>
+
+    <h3>Completed Exams & Scores</h3>
+    <ul>
+    {% for exam in completed_exams %}
+        <li class="completed-exam">
+            <span class="exam-title">{{ exam.title }}</span> - 
+            Score: <span class="score">{{ exam.get_score_for(request.user) }}</span>
+        </li>
+    {% empty %}
+        <li class="no-exams">No completed exams</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

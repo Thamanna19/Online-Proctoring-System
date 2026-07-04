@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam for {{ course_code }} - Admin Panel</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --admin-color: #9b59b6;
+            --dark-color: #2c3e50;
+            --light-gray: #ecf0f1;
+            --border-color: #ddd;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 2rem;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .exam-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+
+        h2 {
+            color: var(--admin-color);
+            margin: 0 0 1rem 0;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--admin-color);
+            box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+        }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 2rem 0;
+        }
+
+        .question-block {
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            background-color: #fcfcfc;
+            position: relative;
+        }
+
+        .question-block::before {
+            content: 'Question';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: white;
+            padding: 0 10px;
+            color: var(--admin-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .correct-option {
+            grid-column: span 2;
+            margin-top: 0.5rem;
+        }
+
+        .correct-option select {
+            width: 200px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--admin-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dfe6e9;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--error-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .correct-option {
+                grid-column: span 1;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+            
+            .exam-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="exam-container">
+        <a href="{% url 'admin_course_view' course_code %}" class="back-link">← Back to Course</a>
+        
+        <h2>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L3 7L12 12L21 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 17L12 22L21 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 12L12 17L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Create Exam ({{ course_code }})
+        </h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="title">Exam Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="duration">Duration (minutes)</label>
+                <input type="number" id="duration" name="duration" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="scheduled_date">Scheduled Date & Time</label>
+                <input type="datetime-local" id="scheduled_date" name="scheduled_date" required>
+            </div>
+
+            <hr class="divider">
+            
+            <h3>Exam Questions</h3>
+            
+            <div id="question-container">
+                <div class="question-block">
+                    <button class="remove-btn" type="button" onclick="removeQuestion(this)">×</button>
+                    <div class="form-group">
+                        <label>Question Text</label>
+                        <textarea name="question" placeholder="Enter the question text" required></textarea>
+                    </div>
+                    
+                    <div class="option-grid">
+                        <div class="form-group">
+                            <label>Option A</label>
+                            <input type="text" name="a" placeholder="Enter option A" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Option B</label>
+                            <input type="text" name="b" placeholder="Enter option B" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Option C</label>
+                            <input type="text" name="c" placeholder="Enter option C" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Option D</label>
+                            <input type="text" name="d" placeholder="Enter option D" required>
+                        </div>
+                        
+                        <div class="form-group correct-option">
+                            <label>Correct Answer</label>
+                            <select name="correct" required>
+                                <option value="">Select correct option</option>
+                                <option value="A">Option A</option>
+                                <option value="B">Option B</option>
+                                <option value="C">Option C</option>
+                                <option value="D">Option D</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="addQuestion()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;">
+                        <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Add Another Question
+                </button>
+                
+                <button type="submit" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 5px;">
+                        <path d="M19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16L21 8V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 21V13H7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 3V8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Create Exam
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function addQuestion() {
+            const container = document.getElementById('question-container');
+            const block = container.querySelector('.question-block').cloneNode(true);
+            block.querySelectorAll('input, textarea, select').forEach(el => el.value = '');
+            container.appendChild(block);
+        }
+        
+        function removeQuestion(button) {
+            const container = document.getElementById('question-container');
+            if (container.querySelectorAll('.question-block').length > 1) {
+                button.closest('.question-block').remove();
+            } else {
+                alert("You need at least one question in the exam.");
+            }
+        }
+    </script>
+</body>
+</html>

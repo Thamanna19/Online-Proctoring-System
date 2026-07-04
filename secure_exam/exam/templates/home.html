@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Exam Portal</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .login-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .login-btn {
+
+
+        
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+        
+        .login-btn:hover {
+            background-color: white;
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-btn.admin {
+            background-color: var(--accent-color);
+        }
+        
+        .login-btn.admin:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            color: var(--dark-color);
+            font-weight: bold;
+        }
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #bdc3c7;
+            margin: 0 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .login-options {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h2>Welcome to Secure Exam Portal</h2>
+            <div class="login-options">
+                <a href="{% url 'login' %}" class="login-btn">Student Login</a>
+                <span class="divider">OR</span>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'custom_admin_login' %}" class="login-btn admin">Admin Login</a>
+                <a href="{% url 'c' %}"
+
+            </div>
+        </div>
+    </header>
+</body><header>
+    <div class="container">
+        
+    </div>
+</header>
+</html>

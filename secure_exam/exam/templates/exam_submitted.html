@@ -1,0 +1,108 @@
+<!-- exam_submitted.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Submitted</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text-color: #1e293b;
+            --text-secondary: #475569;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .message-box {
+            background: var(--card-bg);
+            padding: 48px 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .message-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-box h2 {
+            color: var(--text-color);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .message-box p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 16px;
+        }
+
+        .message-box a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .message-box a:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-box {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .message-box {
+                padding: 32px 24px;
+            }
+            
+            .message-box h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message-box">
+        <h2>Exam Submitted Successfully!</h2>
+        <p>Your answers have been recorded. Thank you for completing the exam.</p>
+        <a href="{% url 'student_course_view' course_code %}">Back to Course Page</a>
+    </div>
+</body>
+</html>
